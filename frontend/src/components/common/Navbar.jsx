@@ -5,6 +5,16 @@ function Navbar() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Map menu items to routes
+  const routeMap = {
+    Home: "/",
+    Recipes: "/recipe", 
+    About: "/about",
+    Contact: "/contact",
+  };
+
+  const menuItems = Object.keys(routeMap);
+
   return (
     <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/70 shadow-lg">
       <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -14,22 +24,16 @@ function Navbar() {
           className="flex items-center space-x-2 cursor-pointer transform hover:scale-105 transition-transform duration-300"
           onClick={() => navigate("/")}
         >
-          <img
-            src="/logo.png"
-            alt="CookBook Logo"
-            className="h-8 sm:h-10"
-          />
+          <img src="/logo.png" alt="CookBook Logo" className="h-8 sm:h-10" />
           <span className="text-2xl font-bold text-purple-600">CookBook</span>
         </a>
 
         {/* Desktop Menu */}
         <ul className="hidden lg:flex items-center space-x-8 font-medium">
-          {["Home", "Recipes", "About", "Contact"].map((item) => (
+          {menuItems.map((item) => (
             <li key={item}>
               <a
-                onClick={() => {
-                  navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`);
-                }}
+                onClick={() => navigate(routeMap[item])}
                 className="relative text-gray-700 hover:text-purple-600 transition-colors duration-300 cursor-pointer"
               >
                 {item}
@@ -43,7 +47,7 @@ function Navbar() {
         <div className="flex items-center space-x-2 lg:space-x-0">
           <button
             onClick={() => navigate("/signup")}
-            className="px-5 py-2 rounded-lg text-white font-semibold bg-purple-500  hover:scale-105 transform transition-all duration-300 shadow-md"
+            className="px-5 py-2 rounded-lg text-white font-semibold bg-purple-500 hover:scale-105 transform transition-all duration-300 shadow-md"
           >
             Join Now
           </button>
@@ -53,7 +57,12 @@ function Navbar() {
             className="lg:hidden p-2 rounded-md text-gray-600 hover:bg-gray-200 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               {isMenuOpen ? (
                 <path
                   strokeLinecap="round"
@@ -81,11 +90,11 @@ function Navbar() {
         }`}
       >
         <ul className="flex flex-col px-4 py-2 space-y-2 font-medium bg-white/90 backdrop-blur-md shadow-lg">
-          {["Home", "Recipes", "About", "Contact"].map((item) => (
+          {menuItems.map((item) => (
             <li key={item}>
               <a
                 onClick={() => {
-                  navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`);
+                  navigate(routeMap[item]);
                   setIsMenuOpen(false);
                 }}
                 className="block py-2 px-3 rounded hover:bg-purple-50 hover:text-purple-600 transition-colors cursor-pointer"
