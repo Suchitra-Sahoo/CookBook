@@ -1,26 +1,52 @@
 import React, { useState } from "react";
-import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaLock,
+  FaUser,
+  FaEye,
+  FaEyeSlash,
+  FaArrowLeft,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import InputField from "./InputField";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
-    // Dummy signup logic
-    setTimeout(() => {
-      console.log({ name, email, password });
+    try {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        toast.success("Signup successfull");
+        navigate("/");
+      } else {
+        toast.error(data.message || "Signup failed");
+      }
+    } catch (err) {
+      toast.error("Server error, try again later.");
+    } finally {
       setLoading(false);
-      alert("Signed up successfully!");
-    }, 1000);
+    }
   };
 
   return (
@@ -42,7 +68,6 @@ function SignupForm() {
 
       {/* Form */}
       <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-        {/* Name */}
         <InputField
           icon={FaUser}
           type="text"
@@ -51,7 +76,6 @@ function SignupForm() {
           onChange={(e) => setName(e.target.value)}
         />
 
-        {/* Email */}
         <InputField
           icon={FaEnvelope}
           type="email"
@@ -60,7 +84,6 @@ function SignupForm() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        {/* Password with toggle */}
         <div className="relative">
           <InputField
             icon={FaLock}
@@ -78,10 +101,6 @@ function SignupForm() {
           </button>
         </div>
 
-        {/* Error message */}
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        {/* Submit button */}
         <button
           type="submit"
           disabled={loading}
@@ -91,15 +110,19 @@ function SignupForm() {
         </button>
       </form>
 
-      {/* Divider + Signin link */}
       <div className="my-4 md:my-6 flex items-center justify-center">
         <span className="h-px flex-1 bg-purple-200"></span>
-        <span className="px-2 md:px-3 text-gray-500 text-sm md:text-base">or</span>
+        <span className="px-2 md:px-3 text-gray-500 text-sm md:text-base">
+          or
+        </span>
         <span className="h-px flex-1 bg-purple-200"></span>
       </div>
       <p className="text-center text-gray-600 text-sm md:text-base">
         Already have an account?{" "}
-        <a href="/signin" className="text-purple-600 font-semibold hover:underline">
+        <a
+          href="/signin"
+          className="text-purple-600 font-semibold hover:underline"
+        >
           Sign In
         </a>
       </p>

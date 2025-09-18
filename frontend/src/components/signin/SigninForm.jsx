@@ -1,6 +1,16 @@
 import React, { useState } from "react";
-import { FaEnvelope, FaLock, FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaLock,
+  FaArrowLeft,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import InputField from "./InputField";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 function SigninForm() {
   const [email, setEmail] = useState("");
@@ -9,21 +19,37 @@ function SigninForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    // Simulate frontend-only signup
-    setTimeout(() => {
-      if (!email || !password) {
-        setError("Please fill in all fields");
+    try {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        toast.success("Signed in successfully");
+        navigate("/");
       } else {
-        console.log({ email, password });
-        alert("Signed in successfully! (frontend only)");
+        setError(data.message || "Signin failed");
+        toast.error(data.message || "Signin failed");
       }
+    } catch (err) {
+      console.error(err);
+      setError("Server error, try again later.");
+      toast.error("Server error, try again later.");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -37,13 +63,14 @@ function SigninForm() {
 
       {/* Sign In heading */}
       <div className="mb-8 flex items-center">
-        <h3 className="text-2xl md:text-3xl font-bold text-purple-600 mr-4">Sign In</h3>
+        <h3 className="text-2xl md:text-3xl font-bold text-purple-600 mr-4">
+          Sign In
+        </h3>
         <div className="flex-grow h-1 bg-purple-200"></div>
       </div>
 
       {/* Form */}
       <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-        {/* Email */}
         <InputField
           icon={FaEnvelope}
           type="email"
@@ -52,7 +79,6 @@ function SigninForm() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        {/* Password with toggle */}
         <div className="relative">
           <InputField
             icon={FaLock}
@@ -70,17 +96,17 @@ function SigninForm() {
           </button>
         </div>
 
-        {/* Error message */}
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
-        {/* Forgot password */}
         <div className="flex justify-end">
-          <a href="/forgot-password" className="text-purple-600 text-sm md:text-base font-medium hover:underline">
+          <a
+            href="/forgot-password"
+            className="text-purple-600 text-sm md:text-base font-medium hover:underline"
+          >
             Forgot Password?
           </a>
         </div>
 
-        {/* Submit button */}
         <button
           type="submit"
           disabled={loading}
@@ -90,15 +116,19 @@ function SigninForm() {
         </button>
       </form>
 
-      {/* Divider + Signup link */}
       <div className="my-4 md:my-6 flex items-center justify-center">
         <span className="h-px flex-1 bg-purple-200"></span>
-        <span className="px-2 md:px-3 text-gray-500 text-sm md:text-base">or</span>
+        <span className="px-2 md:px-3 text-gray-500 text-sm md:text-base">
+          or
+        </span>
         <span className="h-px flex-1 bg-purple-200"></span>
       </div>
       <p className="text-center text-gray-600 text-sm md:text-base">
         Don’t have an account?{" "}
-        <a href="/signup" className="text-purple-600 font-semibold hover:underline">
+        <a
+          href="/signup"
+          className="text-purple-600 font-semibold hover:underline"
+        >
           Create Account
         </a>
       </p>
