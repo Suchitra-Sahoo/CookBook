@@ -27,7 +27,7 @@ function Features() {
         Discover Our Features
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-6 md:gap-8 lg:gap-1">
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-6 md:gap-8 lg:gap-10">
         {features.map((feature, idx) => (
           <div
             key={idx}
