@@ -18,6 +18,9 @@ function RecipeForm({ token, onSubmit }) {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
+  // Dropdown state for Difficulty
+  const [isDifficultyOpen, setIsDifficultyOpen] = useState(false);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -74,19 +77,21 @@ function RecipeForm({ token, onSubmit }) {
   const textareaClass =
     "w-full p-3 rounded-lg bg-purple-50 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition";
 
+  const difficulties = ["Easy", "Medium", "Hard"];
+
   return (
     <div className="flex justify-center p-4 sm:p-6 mt-14 mb-5">
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-xl p-6 sm:p-8">
         <form onSubmit={handleSubmit}>
           <h2 className="text-2xl font-bold text-purple-700 mb-6 text-center sm:text-left">
-            Recipe Details
+           Upload Your Recipe Details
           </h2>
 
           {/* Title & Description */}
           <div className="flex flex-col gap-4">
             <input
               type="text"
-              placeholder="Title"
+              placeholder="Recipe Name"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className={inputClass}
@@ -124,7 +129,7 @@ function RecipeForm({ token, onSubmit }) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <input
               type="text"
-              placeholder="Preparation Time (e.g., 30 min)"
+              placeholder="Preparation Time"
               value={prepTime}
               onChange={(e) => setPrepTime(e.target.value)}
               className={inputClass}
@@ -132,7 +137,7 @@ function RecipeForm({ token, onSubmit }) {
             />
             <input
               type="text"
-              placeholder="Cooking Time (e.g., 45 min)"
+              placeholder="Cooking Time"
               value={cookTime}
               onChange={(e) => setCookTime(e.target.value)}
               className={inputClass}
@@ -158,16 +163,50 @@ function RecipeForm({ token, onSubmit }) {
               className={inputClass}
               required
             />
-            <select
-              value={difficulty}
-              onChange={(e) => setDifficulty(e.target.value)}
-              className={inputClass}
-              required
-            >
-              <option>Easy</option>
-              <option>Medium</option>
-              <option>Hard</option>
-            </select>
+
+            {/* Mobile-friendly Dropdown for Difficulty */}
+            <div className="relative cursor-pointer">
+              <div
+                onClick={() => setIsDifficultyOpen(!isDifficultyOpen)}
+                className="flex items-center justify-between space-x-5 bg-purple-50 px-4 py-3 rounded-lg border border-purple-300"
+              >
+                <span className="text-gray-500 font-semibold">{difficulty}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className={`h-6 w-6 text-gray-500 transform transition-transform ${
+                    isDifficultyOpen ? "rotate-180" : ""
+                  }`}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </div>
+
+              {isDifficultyOpen && (
+                <div className="absolute z-50 flex w-full flex-col bg-gray-100 py-1 px-4 text-gray-800 shadow-xl">
+                  {difficulties.map((level) => (
+                    <button
+                      key={level}
+                      type="button"
+                      onClick={() => {
+                        setDifficulty(level);
+                        setIsDifficultyOpen(false); // close after selecting
+                      }}
+                      className="text-left my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-black"
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Category & Cuisine */}
@@ -226,7 +265,7 @@ function RecipeForm({ token, onSubmit }) {
               placeholder="Enter a step"
               value={stepsInput}
               onChange={(e) => setStepsInput(e.target.value)}
-              className={`${inputClass} pr-12`} // add padding for icon
+              className={`${inputClass} pr-12`}
             />
             <button
               type="button"
@@ -257,6 +296,7 @@ function RecipeForm({ token, onSubmit }) {
               </li>
             ))}
           </ul>
+
           <button
             type="submit"
             className="w-full bg-purple-600 text-white py-3 rounded-lg mt-6 hover:bg-purple-700 transition font-semibold"

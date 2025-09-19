@@ -35,7 +35,7 @@ function PostRecipe() {
   return (
     <>
       <Navbar />
-      <div className="min-h-[60vh] flex flex-col items-center justify-center p-6">
+      <div className="min-h-[60vh] bg-gray-50 flex flex-col items-center justify-center p-6">
         {token && <RecipeForm token={token} onSubmit={handleRecipeSubmit} loading={loading} />}
       </div>
       <Footer />
