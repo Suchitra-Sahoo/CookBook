@@ -18,7 +18,6 @@ function RecipeForm({ token, onSubmit }) {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  // Handle image preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -27,20 +26,17 @@ function RecipeForm({ token, onSubmit }) {
     }
   };
 
-  // Add single step to array
   const addStep = () => {
     const step = stepsInput.trim();
-    if (!step) return; // ignore empty input
-    setSteps([...steps, step]); // add as one step
-    setStepsInput(""); // clear input
+    if (!step) return;
+    setSteps([...steps, step]);
+    setStepsInput("");
   };
 
-  // Remove a step
   const removeStep = (index) => {
     setSteps(steps.filter((_, i) => i !== index));
   };
 
-  // Submit form
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!token) return alert("You must sign in to post a recipe");
@@ -48,14 +44,11 @@ function RecipeForm({ token, onSubmit }) {
     const tags = tagsInput
       .split(",")
       .map((t) => t.trim())
-      .filter((t) => t !== "");
-
+      .filter(Boolean);
     const ingredients = ingredientsInput
       .split(",")
       .map((i) => i.trim())
-      .filter((i) => i !== "");
-
-    // ✅ Join steps with \n for backend compatibility
+      .filter(Boolean);
     const stepsString = steps.join("\n");
 
     onSubmit({
@@ -70,7 +63,7 @@ function RecipeForm({ token, onSubmit }) {
       cuisine,
       tags,
       ingredients,
-      steps: stepsString, // send as string
+      steps: stepsString,
       image,
     });
   };
@@ -82,32 +75,35 @@ function RecipeForm({ token, onSubmit }) {
     "w-full p-3 rounded-lg bg-purple-50 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition";
 
   return (
-    <div className="flex justify-center p-6 mt-14 mb-5">
-      <div className="w-full max-w-4xl bg-white shadow-lg rounded-xl p-8">
+    <div className="flex justify-center p-4 sm:p-6 mt-14 mb-5">
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-xl p-6 sm:p-8">
         <form onSubmit={handleSubmit}>
-          {/* Title & Description */}
-          <h2 className="text-2xl font-bold text-purple-800 mb-6">
+          <h2 className="text-2xl font-bold text-purple-700 mb-6 text-center sm:text-left">
             Recipe Details
           </h2>
-          <input
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className={`${inputClass} mb-4`}
-            required
-          />
-          <textarea
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className={`${textareaClass} mb-4`}
-            rows={3}
-            required
-          />
 
-          {/* Image Upload & Preview */}
-          <div className="mb-6">
+          {/* Title & Description */}
+          <div className="flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={inputClass}
+              required
+            />
+            <textarea
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className={textareaClass}
+              rows={3}
+              required
+            />
+          </div>
+
+          {/* Image Upload */}
+          <div className="mb-6 mt-4 flex flex-col sm:flex-row sm:items-center gap-4">
             <input
               type="file"
               accept="image/*"
@@ -119,13 +115,13 @@ function RecipeForm({ token, onSubmit }) {
               <img
                 src={preview}
                 alt="Preview"
-                className="mt-3 w-48 h-48 object-cover rounded-lg shadow"
+                className="w-full sm:w-48 h-48 object-cover rounded-lg shadow"
               />
             )}
           </div>
 
           {/* Prep Time, Cook Time, Servings */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <input
               type="text"
               placeholder="Preparation Time (e.g., 30 min)"
@@ -153,7 +149,7 @@ function RecipeForm({ token, onSubmit }) {
           </div>
 
           {/* Calories & Difficulty */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <input
               type="number"
               placeholder="Calories"
@@ -175,7 +171,7 @@ function RecipeForm({ token, onSubmit }) {
           </div>
 
           {/* Category & Cuisine */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <input
               type="text"
               placeholder="Category (e.g., Dessert)"
@@ -224,24 +220,24 @@ function RecipeForm({ token, onSubmit }) {
           <label className="block font-semibold mt-4 mb-1 text-purple-700">
             Steps
           </label>
-          <div className="flex mb-2">
+          <div className="relative mb-4">
             <input
               type="text"
               placeholder="Enter a step"
               value={stepsInput}
               onChange={(e) => setStepsInput(e.target.value)}
-              className={`${inputClass} mr-2`}
+              className={`${inputClass} pr-12`} // add padding for icon
             />
             <button
               type="button"
               onClick={addStep}
-              className="bg-purple-700 text-white px-4 rounded-lg transition"
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-white bg-purple-700 hover:bg-purple-800 rounded-md p-2 transition"
             >
               <FaPlus />
             </button>
           </div>
 
-          {/* Show added steps */}
+          {/* Display Steps */}
           <ul className="mb-4">
             {steps.map((step, index) => (
               <li
@@ -254,14 +250,13 @@ function RecipeForm({ token, onSubmit }) {
                 <button
                   type="button"
                   onClick={() => removeStep(index)}
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 transition"
                 >
                   <FaMinus />
                 </button>
               </li>
             ))}
           </ul>
-
           <button
             type="submit"
             className="w-full bg-purple-600 text-white py-3 rounded-lg mt-6 hover:bg-purple-700 transition font-semibold"
