@@ -9,8 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import InputField from "./InputField";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { login } from "../../api/auth";
 
 function SigninForm() {
   const [email, setEmail] = useState("");
@@ -27,26 +26,15 @@ function SigninForm() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const data = await login({ email, password }); // ✅ use API function
 
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        toast.success("Signed in successfully");
-        navigate("/");
-      } else {
-        setError(data.message || "Signin failed");
-        toast.error(data.message || "Signin failed");
-      }
+      localStorage.setItem("token", data.token);
+      toast.success("Signed in successfully");
+      navigate("/");
     } catch (err) {
       console.error(err);
-      setError("Server error, try again later.");
-      toast.error("Server error, try again later.");
+      setError(err.message || "Signin failed");
+      toast.error(err.message || "Signin failed");
     } finally {
       setLoading(false);
     }

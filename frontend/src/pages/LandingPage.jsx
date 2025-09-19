@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import Navbar from "../components/common/Navbar";
 import Hero from "../components/landing-page/Hero";
 import Features from "../components/landing-page/Features";
@@ -8,20 +7,8 @@ import CTA from "../components/landing-page/CTA";
 import Footer from "../components/common/Footer";
 import Testimonials from "../components/landing-page/Testimonials";
 import Faq from "../components/landing-page/Faq";
-import Loader from "../components/common/Loader/Loader";
 
 function LandingPage() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000); 
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) return <Loader />; 
-
   return (
     <>
       <Navbar />

@@ -10,8 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import InputField from "./InputField";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { signup } from "../../api/auth";  // ✅ use API function
 
 function SignupForm() {
   const [name, setName] = useState("");
@@ -27,23 +26,12 @@ function SignupForm() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        toast.success("Signup successfull");
-        navigate("/");
-      } else {
-        toast.error(data.message || "Signup failed");
-      }
+      const data = await signup({ name, email, password }); // ✅ use api/auth.js
+      localStorage.setItem("token", data.token);
+      toast.success("Signup successful");
+      navigate("/");
     } catch (err) {
-      toast.error("Server error, try again later.");
+      toast.error(err.message || "Signup failed");
     } finally {
       setLoading(false);
     }

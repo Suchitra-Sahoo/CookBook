@@ -105,7 +105,7 @@ function Testimonials() {
       </div>
 
       {/* CSS Animation */}
-      <style jsx>{`
+      <style>{`
         @keyframes scroll {
           0% {
             transform: translateX(0);
