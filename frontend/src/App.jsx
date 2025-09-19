@@ -7,6 +7,7 @@ import LandingPage from "./pages/LandingPage";
 import Signin from "./pages/Signin";
 import RecipePage from "./pages/RecipePage";
 import IndividualRecipe from "./components/recipe-page/IndividualRecipe";
+import PostRecipe from "./pages/PostRecipe";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/signin" element={<Signin />} />
         <Route path="/recipe" element={<RecipePage />} />
         <Route path="/recipe/:id" element={<IndividualRecipe />} />
+        <Route path="/post-recipe" element={<PostRecipe />} />
       </Routes>
 
       {/* Toast container*/}

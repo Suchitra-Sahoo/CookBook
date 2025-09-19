@@ -11,6 +11,7 @@ function Navbar() {
     Recipes: "/recipe", 
     About: "/about",
     Contact: "/contact",
+    PostRecipe: "/post-recipe"
   };
 
   const menuItems = Object.keys(routeMap);
