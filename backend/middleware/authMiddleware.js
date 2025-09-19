@@ -18,15 +18,20 @@ const protect = async (req, res, next) => {
       // Get user from the token (exclude password)
       req.user = await User.findById(decoded.id).select('-password');
 
-      next(); // pass control to next middleware
+      if (!req.user) {
+        return res.status(401).json({ message: 'User not found' });
+      }
+
+      next(); 
     } catch (error) {
       console.error(error);
-      res.status(401).json({ message: 'Not authorized, token failed' });
+      if (error.name === "TokenExpiredError") {
+        return res.status(401).json({ message: "Token expired, please login again" });
+      }
+      return res.status(401).json({ message: 'Not authorized, token failed' });
     }
-  }
-
-  if (!token) {
-    res.status(401).json({ message: 'Not authorized, no token' });
+  } else {
+    return res.status(401).json({ message: 'Not authorized, no token' });
   }
 };
 

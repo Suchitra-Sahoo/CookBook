@@ -1,8 +1,8 @@
 {
   "info": {
-    "name": "CookBook Auth API",
+    "name": "CookBook API",
     "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
-    "description": "Postman collection for CookBook backend authentication (register & login)",
+    "description": "Postman collection for CookBook backend (auth + recipes)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -50,6 +50,94 @@
           "host": ["localhost"],
           "port": "5000",
           "path": ["api", "auth", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Upload Recipe (Protected)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Paneer Butter Masala", "type": "text" },
+            { "key": "description", "value": "Creamy paneer curry", "type": "text" },
+            { "key": "prepTime", "value": "15 mins", "type": "text" },
+            { "key": "cookTime", "value": "30 mins", "type": "text" },
+            { "key": "servings", "value": "4", "type": "text" },
+            { "key": "calories", "value": "350", "type": "text" },
+            { "key": "difficulty", "value": "Medium", "type": "text" },
+            { "key": "ingredients", "value": "Paneer, Butter, Tomato, Cream, Spices", "type": "text" },
+            { "key": "steps", "value": "Chop onions\nCook gravy\nAdd paneer", "type": "text" },
+            { "key": "category", "value": "Main Course", "type": "text" },
+            { "key": "cuisine", "value": "Indian", "type": "text" },
+            { "key": "tags", "value": "vegetarian, curry", "type": "text" },
+            { "key": "image", "type": "file" }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/recipes",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "recipes"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Recipes (Public)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/recipes",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "recipes"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get My Recipes (Protected)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/recipes/myrecipes",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "recipes", "myrecipes"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Single Recipe (Public)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/recipes/:id",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "recipes", ":id"]
         }
       },
       "response": []
