@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
 import Loader from "../../components/common/Loader/Loader";
+import API_URL from "../../config/api"; // adjust path if needed
+
 
 const IndividualRecipe = () => {
   const { id } = useParams();
@@ -44,7 +46,7 @@ const IndividualRecipe = () => {
         {recipe.image && (
           <div className="flex-shrink-0 w-full md:w-[400px] lg:w-[510px]">
             <img
-              src={`${import.meta.env.VITE_API_URL}/${recipe.image}`}
+              src={`${API_URL}/${recipe.image}`}
               alt={recipe.title}
               className="w-full h-96 object-cover rounded-3xl shadow-xl border border-gray-200"
             />
