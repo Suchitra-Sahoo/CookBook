@@ -6,7 +6,7 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import InputField from "./InputField";
 import { login } from "../../api/auth";
@@ -113,12 +113,12 @@ function SigninForm() {
       </div>
       <p className="text-center text-gray-600 text-sm md:text-base">
         Don’t have an account?{" "}
-        <a
-          href="/signup"
+        <Link
+          to="/signup"
           className="text-purple-600 font-semibold hover:underline"
         >
           Create Account
-        </a>
+        </Link>
       </p>
     </div>
   );
