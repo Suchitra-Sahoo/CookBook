@@ -1,10 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_URL =
-  import.meta.env.MODE === "production"
-    ? import.meta.env.VITE_DEPLOYED_API_URL
-    : import.meta.env.VITE_API_URL;
+import API_URL from "../../config/api";
 
 const RecipeCard = ({ recipe }) => {
   const navigate = useNavigate();
