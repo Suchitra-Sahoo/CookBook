@@ -1,6 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_URL =
+  import.meta.env.MODE === "production"
+    ? import.meta.env.VITE_DEPLOYED_API_URL
+    : import.meta.env.VITE_API_URL;
+
 const RecipeCard = ({ recipe }) => {
   const navigate = useNavigate();
   return (
@@ -8,7 +13,7 @@ const RecipeCard = ({ recipe }) => {
       {/* Image */}
       {recipe.image && (
         <img
-          src={`${import.meta.env.VITE_API_URL}/${recipe.image}`}
+          src={`${API_URL}/${recipe.image}`}
           alt={recipe.title}
           className="w-full h-48 object-cover rounded-lg mb-4"
         />
