@@ -10,7 +10,7 @@ function Hero() {
 
       <div className="max-w-screen-xl mx-auto px-6 py-16 flex flex-col-reverse md:flex-row items-center justify-between">
         {/* Text Content */}
-        <div className="md:w-1/2 text-center md:text-left">
+        <div className="md:w-1/2 text-center md:text-left relative z-10">
           <h1 className="text-4xl md:text-5xl font-extrabold text-purple-700 mb-4 drop-shadow-md">
             Discover, Share & Cook{" "}
             <span className="text-purple-900">Delicious Recipes!</span>
