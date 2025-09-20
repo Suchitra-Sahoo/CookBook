@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Hero() {
   return (
@@ -11,14 +12,18 @@ function Hero() {
         {/* Text Content */}
         <div className="md:w-1/2 text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-extrabold text-purple-700 mb-4 drop-shadow-md">
-            Discover, Share & Cook <span className="text-purple-900">Delicious Recipes!</span>
+            Discover, Share & Cook{" "}
+            <span className="text-purple-900">Delicious Recipes!</span>
           </h1>
           <p className="text-lg text-purple-800 mb-6">
-            Join our community of food lovers and explore thousands of mouth-watering recipes.
+            Join our community of food lovers and explore thousands of
+            mouth-watering recipes.
           </p>
-          <button className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-purple-700 transform hover:scale-105 transition duration-300">
-            Browse Recipes
-          </button>
+          <Link to="/recipe">
+            <button className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-purple-700 transform hover:scale-105 transition duration-300">
+              Browse Recipes
+            </button>
+          </Link>
         </div>
 
         {/* Hero Image */}
