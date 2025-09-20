@@ -10,7 +10,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import InputField from "./InputField";
-import { signup } from "../../api/auth";  // ✅ use API function
+import { signup } from "../../api/auth"; // ✅ use API function
+import { Link } from "react-router-dom";
 
 function SignupForm() {
   const [name, setName] = useState("");
@@ -107,12 +108,12 @@ function SignupForm() {
       </div>
       <p className="text-center text-gray-600 text-sm md:text-base">
         Already have an account?{" "}
-        <a
-          href="/signin"
+        <Link
+          to="/signin"
           className="text-purple-600 font-semibold hover:underline"
         >
           Sign In
-        </a>
+        </Link>
       </p>
     </div>
   );
