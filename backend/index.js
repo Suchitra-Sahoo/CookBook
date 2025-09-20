@@ -27,15 +27,25 @@ app.use(
     origin: function (origin, callback) {
       // allow requests with no origin (like Postman)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = "The CORS policy for this site does not allow access from the specified Origin.";
-        return callback(new Error(msg), false);
+
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://cook-book-e69ridsdv-suchitra-sahoos-projects.vercel.app"
+      ];
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(
+          new Error("CORS policy: This origin is not allowed"),
+          false
+        );
       }
-      return callback(null, true);
     },
     credentials: true,
   })
 );
+
 
 // Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
