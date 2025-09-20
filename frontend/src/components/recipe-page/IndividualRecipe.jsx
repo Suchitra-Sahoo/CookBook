@@ -6,28 +6,26 @@ import Footer from "../../components/common/Footer";
 import Loader from "../../components/common/Loader/Loader";
 import API_URL from "../../config/api"; // adjust path if needed
 
-
 const IndividualRecipe = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchRecipe = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/recipes/${id}`
-        );
-        const data = await res.json();
-        setRecipe(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchRecipe();
-  }, [id]);
+  const fetchRecipe = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/recipes/${id}`);
+      const data = await res.json();
+      setRecipe(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchRecipe();
+}, [id]);
+
 
   if (loading) return <Loader />;
   if (!recipe)
@@ -89,37 +87,36 @@ const IndividualRecipe = () => {
         {/* Right: Ingredients & Steps */}
         <div className="flex flex-col gap-6 w-full lg:w-auto">
           {/* Ingredients */}
-        {recipe.ingredients?.length > 0 && (
-  <div>
-    <h2 className="text-2xl font-bold text-purple-700 mb-2">
-      Ingredients
-    </h2>
+          {recipe.ingredients?.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-bold text-purple-700 mb-2">
+                Ingredients
+              </h2>
 
-    {recipe.ingredients.length < 11 ? (
-      // Single column for less than 11 ingredients
-      <ul className="list-disc list-inside text-gray-700">
-        {recipe.ingredients.map((ing, i) => (
-          <li key={i}>{ing}</li>
-        ))}
-      </ul>
-    ) : (
-      // Two columns for 11 or more ingredients
-      <div className="grid grid-cols-2 gap-6 text-gray-700">
-        <ul className="list-disc list-inside">
-          {recipe.ingredients.slice(0, 11).map((ing, i) => (
-            <li key={i}>{ing}</li>
-          ))}
-        </ul>
-        <ul className="list-disc list-inside">
-          {recipe.ingredients.slice(11).map((ing, i) => (
-            <li key={i}>{ing}</li>
-          ))}
-        </ul>
-      </div>
-    )}
-  </div>
-)}
-
+              {recipe.ingredients.length < 11 ? (
+                // Single column for less than 11 ingredients
+                <ul className="list-disc list-inside text-gray-700">
+                  {recipe.ingredients.map((ing, i) => (
+                    <li key={i}>{ing}</li>
+                  ))}
+                </ul>
+              ) : (
+                // Two columns for 11 or more ingredients
+                <div className="grid grid-cols-2 gap-6 text-gray-700">
+                  <ul className="list-disc list-inside">
+                    {recipe.ingredients.slice(0, 11).map((ing, i) => (
+                      <li key={i}>{ing}</li>
+                    ))}
+                  </ul>
+                  <ul className="list-disc list-inside">
+                    {recipe.ingredients.slice(11).map((ing, i) => (
+                      <li key={i}>{ing}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Steps */}
           {recipe.steps?.length > 0 && (
