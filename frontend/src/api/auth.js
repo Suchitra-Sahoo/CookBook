@@ -1,4 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.MODE === "production"
+  ? import.meta.env.VITE_DEPLOYED_API_URL
+  : import.meta.env.VITE_API_URL;
 
 export const signup = async (userData) => {
   const res = await fetch(`${API_URL}/api/auth/register`, {
