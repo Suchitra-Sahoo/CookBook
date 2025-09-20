@@ -28,11 +28,6 @@ app.use(
       // allow requests with no origin (like Postman)
       if (!origin) return callback(null, true);
 
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "https://cook-book-e69ridsdv-suchitra-sahoos-projects.vercel.app"
-      ];
-
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       } else {
