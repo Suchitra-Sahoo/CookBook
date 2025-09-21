@@ -12,20 +12,19 @@ const IndividualRecipe = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  const fetchRecipe = async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/recipes/${id}`);
-      const data = await res.json();
-      setRecipe(data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchRecipe();
-}, [id]);
-
+    const fetchRecipe = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/recipes/${id}`);
+        const data = await res.json();
+        setRecipe(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRecipe();
+  }, [id]);
 
   if (loading) return <Loader />;
   if (!recipe)
@@ -44,10 +43,17 @@ const IndividualRecipe = () => {
         {recipe.image && (
           <div className="flex-shrink-0 w-full md:w-[400px] lg:w-[510px]">
             <img
-              src={`${API_URL}/${recipe.image}`}
+              src={
+                recipe.image
+                  ? recipe.image.startsWith("http")
+                    ? recipe.image // Cloudinary URL
+                    : `${API_URL}/${recipe.image}` // local backend path
+                  : "/placeholder.png" // optional default image
+              }
               alt={recipe.title}
               className="w-full h-96 object-cover rounded-3xl shadow-xl border border-gray-200"
             />
+
             <h1 className="text-4xl font-extrabold text-purple-700 mt-5">
               {recipe.title}
             </h1>

@@ -10,7 +10,13 @@ const RecipeCard = ({ recipe }) => {
       {/* Image */}
       {recipe.image && (
         <img
-          src={`${API_URL}/${recipe.image}`}
+          src={
+            recipe.image
+              ? recipe.image.startsWith("http")
+                ? recipe.image // Cloudinary URL
+                : `${API_URL}/${recipe.image}` // local backend path
+              : "/placeholder.png" // optional default image
+          }
           alt={recipe.title}
           className="w-full h-48 object-cover rounded-lg mb-4"
         />

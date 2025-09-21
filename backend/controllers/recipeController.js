@@ -1,5 +1,6 @@
 // controllers/recipeController.js
 const Recipe = require("../models/Recipe");
+const cloudinary = require("../config/cloudinary");
 
 // POST recipe (Protected)
 const createRecipe = async (req, res) => {
@@ -19,6 +20,12 @@ const createRecipe = async (req, res) => {
       tags,
     } = req.body;
 
+    let imageUrl = null;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      imageUrl = result.secure_url; // public URL
+    }
+
     const newRecipe = new Recipe({
       title,
       description,
@@ -32,7 +39,7 @@ const createRecipe = async (req, res) => {
       category,
       cuisine,
       tags: tags.split(",").map((t) => t.trim()),
-      image: req.file ? req.file.path : null,
+      image: imageUrl,
       user: req.user._id,
     });
 
@@ -46,7 +53,9 @@ const createRecipe = async (req, res) => {
 // GET recipes of logged-in user (Protected)
 const getMyRecipes = async (req, res) => {
   try {
-    const recipes = await Recipe.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const recipes = await Recipe.find({ user: req.user._id }).sort({
+      createdAt: -1,
+    });
     res.json(recipes);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -68,7 +77,10 @@ const getAllRecipes = async (req, res) => {
 // GET single recipe by ID (Public)
 const getSingleRecipe = async (req, res) => {
   try {
-    const recipe = await Recipe.findById(req.params.id).populate("user", "name email");
+    const recipe = await Recipe.findById(req.params.id).populate(
+      "user",
+      "name email"
+    );
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
     }
