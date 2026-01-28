@@ -6,6 +6,7 @@ const path = require("path");
 
 const authRoutes = require("./routes/auth");
 const recipeRoutes = require("./routes/recipeRoutes");
+const commentRoutes = require("./routes/comments");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,6 +49,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
+app.use("/api/comments", commentRoutes);
 
 // Health check route
 app.get("/", (req, res) => res.send("Backend running"));

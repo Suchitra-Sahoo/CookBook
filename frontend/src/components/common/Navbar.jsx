@@ -1,20 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token"); 
+    setIsLoggedIn(!!token);
+  }, []);
 
   // Map menu items to routes
   const routeMap = {
     Home: "/",
-    Recipes: "/recipe", 
+    Recipes: "/recipe",
     About: "/about",
     Contact: "/contact",
-    "Post Recipe": "/post-recipe"
+    "Post Recipe": "/post-recipe",
   };
 
   const menuItems = Object.keys(routeMap);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // remove JWT
+    setIsLoggedIn(false);
+    navigate("/"); 
+  };
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/70 shadow-lg">
@@ -44,14 +57,23 @@ function Navbar() {
           ))}
         </ul>
 
-        {/* Join Now Button + Hamburger */}
+        {/* Join Now / Logout Button + Hamburger */}
         <div className="flex items-center space-x-2 lg:space-x-0">
-          <button
-            onClick={() => navigate("/signup")}
-            className="px-5 py-2 rounded-lg text-white font-semibold bg-purple-500 hover:scale-105 transform transition-all duration-300 shadow-md"
-          >
-            Join Now
-          </button>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="px-5 py-2 rounded-lg text-white font-semibold bg-purple-500 hover:scale-105 transform transition-all duration-300 shadow-md"
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/signup")}
+              className="px-5 py-2 rounded-lg text-white font-semibold bg-purple-500 hover:scale-105 transform transition-all duration-300 shadow-md"
+            >
+              Join Now
+            </button>
+          )}
 
           {/* Hamburger */}
           <button
