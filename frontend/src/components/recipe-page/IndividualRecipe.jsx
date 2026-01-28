@@ -40,46 +40,52 @@ const IndividualRecipe = () => {
     fetchRecipe();
   }, [id]);
 
-  // Fetch comments
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/comments/${id}`);
-        const data = await res.json();
-        setComments(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchComments();
-  }, [id]);
-
-  // Post comment
-  const handlePostComment = async () => {
-    if (!commentText.trim()) return;
-
+// Fetch comments
+useEffect(() => {
+  const fetchComments = async () => {
     try {
-      setPosting(true);
-      const token = localStorage.getItem("token");
-
       const res = await fetch(`${API_URL}/api/comments/${id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ content: commentText }),
+        credentials: "include", 
       });
-
-      const newComment = await res.json();
-      setComments((prev) => [...prev, newComment]);
-      setCommentText("");
+      if (!res.ok) throw new Error("Failed to fetch comments");
+      const data = await res.json();
+      setComments(data);
     } catch (err) {
       console.error(err);
-    } finally {
-      setPosting(false);
     }
   };
+  fetchComments();
+}, [id]);
+
+// Post comment
+const handlePostComment = async () => {
+  if (!commentText.trim()) return;
+
+  try {
+    setPosting(true);
+    const token = localStorage.getItem("token"); // JWT token
+
+    const res = await fetch(`${API_URL}/api/comments/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ content: commentText }),
+    });
+
+    if (!res.ok) throw new Error("Failed to post comment");
+
+    const newComment = await res.json();
+    setComments((prev) => [...prev, newComment]);
+    setCommentText("");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to post comment. Check console.");
+  } finally {
+    setPosting(false);
+  }
+};
 
   if (loading) return <Loader />;
 
